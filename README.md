@@ -1,5 +1,5 @@
-Instalar npm
-instalar cypress
+Instalar npm;
+instalar cypress.
 
 Para rodar o projeto adicione suas credenciais:
 SUA_API_KEY; // Substitua com a chave de API
