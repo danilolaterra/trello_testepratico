@@ -1,0 +1,57 @@
+QUESTAO 02
+
+*Escreva a consulta SQL para listar o nome de todos os alunos 
+
+SELECT ALUNO.nome
+FROM ALUNO
+JOIN CURSA ON ALUNO.coda = CURSA.coda
+JOIN DISCIPLINA ON CURSA.codd = DISCIPLINA.codd
+JOIN LECIONA ON DISCIPLINA.codd = LECIONA.codd
+JOIN PROFESSOR ON LECIONA.codp = PROFESSOR.codp
+WHERE DISCIPLINA.nome = 'Cálculo'
+ AND PROFESSOR.nome = 'João';
+
+
+*matriculados na   disciplina de Cálculo do professor João.
+
+
+SELECT ALUNO.nome
+FROM ALUNO
+JOIN CURSA ON ALUNO.coda = CURSA.coda
+JOIN DISCIPLINA ON CURSA.codd = DISCIPLINA.codd
+JOIN LECIONA ON DISCIPLINA.codd = LECIONA.codd
+JOIN PROFESSOR ON LECIONA.codp = PROFESSOR.codp
+WHERE DISCIPLINA.nome = 'Cálculo'
+  AND PROFESSOR.nome = 'João';
+
+
+
+*Escreva a consulta SQL para exibir a quantidade de alunos por disciplinas.
+
+SELECT DISCIPLINA.nome, COUNT(CURSA.coda) AS quantidade_alunos
+FROM DISCIPLINA
+JOIN CURSA ON DISCIPLINA.codd = CURSA.codd
+GROUP BY DISCIPLINA.nome;
+
+
+*Escreva a consulta SQL para listar as disciplinas que todos os professores lecionam.
+
+SELECT DISCIPLINA.nome
+FROM DISCIPLINA
+JOIN LECIONA ON DISCIPLINA.codd = LECIONA.codd
+GROUP BY DISCIPLINA.nome
+HAVING COUNT(LECIONA.codp) = (SELECT COUNT(*) FROM PROFESSOR);
+
+
+*Escreva a consulta SQL que exibe o total de professores.
+
+SELECT COUNT(*) AS total_professores
+FROM PROFESSOR;
+
+*Escreva a consulta SQL para listar todos os alunos que cursaram alguma disciplina do ano 2000 até 2020.
+
+SELECT DISTINCT ALUNO.nome
+FROM ALUNO
+JOIN CURSA ON ALUNO.coda = CURSA.coda
+WHERE CURSA.ano BETWEEN 2000 AND 2020;
+

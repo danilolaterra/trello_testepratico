@@ -1,0 +1,121 @@
+Podemos começar adotando uma premissa de campo/valor para uma primeira validação.
+
+Em seguida vou detalhar um pouco mais com cenários em Gherkin.
+Cliente Destino:
+Deve ser um campo obrigatório.
+Deve aceitar somente caracteres válidos (letras e números).
+Deve corresponder a um cliente existente.
+
+Valor:
+Deve ser um campo obrigatório.
+Deve aceitar apenas valores numéricos positivos.
+O valor não pode ser maior que o saldo disponível (R$ 200,00).
+Data de Efetivação:
+Deve ser um campo obrigatório.
+Deve aceitar somente datas válidas.
+A data não pode ser no passado.
+
+Botões:
+O botão "Transferir" deve realizar a transferência se todos os campos estiverem preenchidos corretamente.
+O botão "Cancelar" deve limpar todos os campos e retornar ao estado inicial.
+
+
+Cenários:
+
+Funcionalidade: Validação de Campos Obrigatórios
+
+  Cenário: Cliente destino não preenchido
+	Dado que o campo "Cliente destino" está vazio
+	E o campo "Valor" está preenchido com "50"
+	E o campo "Data de efetivação" está preenchido com "2024-07-20"
+	Quando o usuário clica no botão "Transferir"
+	Então o sistema deve exibir uma mensagem de erro "Cliente destino é obrigatório"
+
+  Cenário: Valor não preenchido
+	Dado que o campo "Cliente destino" está preenchido com "Cliente123"
+	E o campo "Valor" está vazio
+	E o campo "Data de efetivação" está preenchido com "2024-07-20"
+	Quando o usuário clica no botão "Transferir"
+	Então o sistema deve exibir uma mensagem de erro "Valor é obrigatório"
+
+  Cenário: Data de efetivação não preenchida
+	Dado que o campo "Cliente destino" está preenchido com "Cliente123"
+	E o campo "Valor" está preenchido com "50"
+	E o campo "Data de efetivação" está vazio
+	Quando o usuário clica no botão "Transferir"
+	Então o sistema deve exibir uma mensagem de erro "Data de efetivação é obrigatória"
+
+
+Funcionalidade: Validação de Dados
+
+  Cenário: Cliente destino inválido
+	Dado que o campo "Cliente destino" está preenchido com "!@#"
+	E o campo "Valor" está preenchido com "50"
+	E o campo "Data de efetivação" está preenchido com "2024-07-20"
+	Quando o usuário clica no botão "Transferir"
+Então o sistema deve exibir uma mensagem de erro "Cliente destino inválido"
+
+  Cenário: Valor inválido
+	Dado que o campo "Cliente destino" está preenchido com "Cliente123"
+	E o campo "Valor" está preenchido com "-50"
+	E o campo "Data de efetivação" está preenchido com "2024-07-20"
+	Quando o usuário clica no botão "Transferir"
+	Então o sistema deve exibir uma mensagem de erro "Valor inválido"
+
+  Cenário: Data de efetivação inválida
+	Dado que o campo "Cliente destino" está preenchido com "Cliente123"
+	E o campo "Valor" está preenchido com "50"
+	E o campo "Data de efetivação" está preenchido com "32/13/2024"
+	Quando o usuário clica no botão "Transferir"
+	Então o sistema deve exibir uma mensagem de erro "Data de efetivação inválida"
+
+  Cenário: Data de efetivação no passado
+	Dado que o campo "Cliente destino" está preenchido com "Cliente123"
+	E o campo "Valor" está preenchido com "50"
+	E o campo "Data de efetivação" está preenchido com "2023-07-01"
+	Quando o usuário clica no botão "Transferir"
+	Então o sistema deve exibir uma mensagem de erro "Data de efetivação não pode ser no passado"
+
+
+Funcionalidade: Limite de Saldo
+
+  Cenário: Valor maior que o saldo disponível
+	Dado que o campo "Cliente destino" está preenchido com "Cliente123"
+	E o campo "Valor" está preenchido com "250"
+	E o campo "Data de efetivação" está preenchido com "2024-07-20"
+	Quando o usuário clica no botão "Transferir"
+	Então o sistema deve exibir uma mensagem de erro "Saldo insuficiente"
+
+
+
+Funcionalidade: Funcionalidade dos Botões
+
+  Cenário: Transferir com todos os campos preenchidos corretamente
+	Dado que o campo "Cliente destino" está preenchido com "Cliente123"
+	E o campo "Valor" está preenchido com "50"
+	E o campo "Data de efetivação" está preenchido com "2024-07-20"
+	Quando o usuário clica no botão "Transferir"
+Então a transferência deve ser realizada com sucesso
+
+  Cenário: Cancelar transferência
+	Dado que o campo "Cliente destino" está preenchido com "Cliente123"
+	E o campo "Valor" está preenchido com "50"
+	E o campo "Data de efetivação" está preenchido com "2024-07-20"
+	Quando o usuário clica no botão "Cancelar"
+	Então todos os campos devem ser limpos e o sistema deve retornar ao estado inicial
+
+Funcionalidade: Cenários Adicionais
+
+  Cenário: Transferência com data de efetivação no mesmo dia
+	Dado que o campo "Cliente destino" está preenchido com "Cliente123"
+	E o campo "Valor" está preenchido com "50"
+	E o campo "Data de efetivação" está preenchido com a data atual
+	Quando o usuário clica no botão "Transferir"
+	Então a transferência deve ser realizada com sucesso
+
+  Cenário: Transferência com data de efetivação futura
+	Dado que o campo "Cliente destino" está preenchido com "Cliente123"
+	E o campo "Valor" está preenchido com "50"
+	E o campo "Data de efetivação" está preenchido com "2024-12-31"
+	Quando o usuário clica no botão "Transferir"
+	Então a transferência deve ser realizada com sucesso
